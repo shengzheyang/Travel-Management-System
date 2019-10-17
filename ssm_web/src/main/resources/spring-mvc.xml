@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--scan package: create controller objects-->
+    <context:component-scan base-package="com.itheima.controller"></context:component-scan>
+    <!--scan log package-->
+    <context:component-scan base-package="com.itheima.log"></context:component-scan>
+    <!--viewResolver-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/pages/"></property>
+        <property name="suffix" value=".jsp"></property>
+    </bean>
+    <!--enable annotation-->
+    <mvc:annotation-driven conversion-service="conversionService"></mvc:annotation-driven>
+
+    <!--release static resources-->
+    <mvc:default-servlet-handler></mvc:default-servlet-handler>
+    <!--<mvc:resources mapping="/css/*" location="/css/"></mvc:resources>-->
+    <!--<mvc:resources mapping="/img/*" location="/img/"></mvc:resources>-->
+    <!--<mvc:resources mapping="/plugins/*" location="/plugins/"></mvc:resources>-->
+
+    <!--ConversionServiceFactoryBean-->
+    <bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+        <property name="converters">
+            <set>
+                <bean class="pers.shengzy.converter.StringToDateConverter"></bean>
+            </set>
+        </property>
+    </bean>
+
+
+    <!--aop autoproxy-->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+    <!--enable annotation for security framework-->
+    <security:global-method-security secured-annotations="enabled"/>
+</beans>

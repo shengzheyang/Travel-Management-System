@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn" monitorInterval="30" strict="true" schema="Log4J-V2.2.xsd">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %level [%C{36}.%M] - %msg%n"/>
+        </Console>
+
+        <file name="myLogFile" fileName="d:/log/ssm.log" append="true">
+            <PatternLayout pattern="%date{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %level [%C{36}.%M] - %msg%n"/>
+        </file>
+    </Appenders>
+
+    <Loggers>
+        <!-- global config -->
+        <root level="info">
+            <!--where to show normal log-->
+            <appenderRef ref="Console"/>
+            <appender-ref ref="myLogFile"/>
+        </root>
+
+        <!-- service log -->
+        <logger name="com.itheima.service" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="myLogFile"/>
+        </logger>
+
+        <!-- dao log -->
+        <logger name="com.itheima.dao" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="myLogFile"/>
+        </logger>
+        <!-- transaction log -->
+        <logger name="org.springframework.jdbc" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+            <appender-ref ref="myLogFile"/>
+        </logger>
+    </Loggers>
+
+
+</Configuration>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/security
+       http://www.springframework.org/schema/security/spring-security.xsd
+">
+    <!--do not intercept login and error page-->
+    <security:http pattern="/login.jsp" security="none"></security:http>
+    <security:http pattern="/error.jsp" security="none"></security:http>
+    <security:http pattern="/favicon.ico" security="none"></security:http>
+    <security:http pattern="/css/**" security="none"></security:http>
+    <security:http pattern="/img/**" security="none"></security:http>
+    <security:http pattern="/plugins/**" security="none"></security:http>
+
+    <!--
+        rules for interception
+    -->
+    <security:http auto-config="true" use-expressions="true">
+        <!-- every request must come with ROLE_ADMIN,ROLE_USER permission -->
+        <security:intercept-url pattern="/**" access="hasAnyRole('ROLE_ADMIN','ROLE_USER')"/>
+        <!--assign pages for security framworks-->
+        <security:form-login login-page="/login.jsp"
+                             login-processing-url="/login"
+                             default-target-url="/index.jsp"
+                             authentication-failure-url="/login.jsp"
+        ></security:form-login>
+
+        <!--disable csrf-->
+        <security:csrf disabled="true"></security:csrf>
+
+        <!-- logout -->
+        <security:logout invalidate-session="true" logout-url="/logout" logout-success-url="/login.jsp"/>
+
+        <!--jump to error page if rejected-->
+        <security:access-denied-handler error-page="/failer.jsp"></security:access-denied-handler>
+    </security:http>
+
+
+    <!-- authentication for login -->
+    <security:authentication-manager>
+        <security:authentication-provider user-service-ref="userService">
+            <security:password-encoder ref="passwordEncoder"></security:password-encoder>
+        </security:authentication-provider>
+    </security:authentication-manager>
+
+    <!--encrypter-->
+    <bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+
+
+</beans>
